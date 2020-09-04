@@ -16,54 +16,58 @@ import { selectCurrentUser } from "./redux/user/user.selectors";
 
 // STYLES
 const Container = styled("div")`
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 class App extends Component {
-   unsubscribeFromAuth = null;
+  unsubscribeFromAuth = null;
 
-   componentDidMount() {
-      const { setCurrentUser } = this.props;
-      this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-         if (userAuth) {
-            const userRef = await createUserProfileDocument(userAuth);
+  renderAuth = () => {
+    return this.props.currentUser ? <Redirect to="/" /> : <Authentification />;
+  };
 
-            userRef.onSnapshot((snapShot) => {
-               setCurrentUser({
-                  id: snapShot.id,
-                  ...snapShot.data(),
-               });
-            });
-         } else {
-            setCurrentUser(userAuth);
-         }
-      });
-   }
+  componentDidMount() {
+    const { setCurrentUser } = this.props;
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
 
-   componentWillUnmount() {
-      this.unsubscribeFromAuth();
-   }
+        userRef.onSnapshot(snapShot => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+        });
+      } else {
+        setCurrentUser(userAuth);
+      }
+    });
+  }
 
-   render() {
-      return (
-         <Container>
-            <Header />
-            <Switch>
-               <Route exact path="/" component={Homepage} />
-               <Route path="/shop" component={Shop} />
-               <Route exact path="/checkout" component={Checkout} />
-               <Route exact path="/auth" render={() => (this.props.currentUser ? <Redirect to="/" /> : <Authentification />)} />
-            </Switch>
-         </Container>
-      );
-   }
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+
+  render() {
+    return (
+      <Container>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Homepage} />
+          <Route exact path="/shop" component={Shop} />
+          <Route exact path="/checkout" component={Checkout} />
+          <Route exact path="/auth" render={this.renderAuth} />
+        </Switch>
+      </Container>
+    );
+  }
 }
 
 const mapStateToProps = createStructuredSelector({ currentUser: selectCurrentUser });
 
-const mapDispatchToProps = (dispatch) => ({ setCurrentUser: (user) => dispatch(setCurrentUser(user)) });
+const mapDispatchToProps = dispatch => ({ setCurrentUser: user => dispatch(setCurrentUser(user)) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

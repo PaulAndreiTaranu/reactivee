@@ -14,60 +14,60 @@ import { ReactComponent as Logo } from "../assets/svg/crown.svg";
 
 // STYLES
 const Container = styled("div")`
-   height: 70px;
-   width: 100%;
-   font-size: 2rem;
+  width: 100%;
+  min-height: max-content;
+  padding: var(--padding);
+  font-size: 2rem;
 
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const LogoLink = styled(Link)`
-   height: 100%;
-   width: 70px;
+  height: 100%;
+  width: 70px;
 
-   display: flex;
-   align-items: center;
-   justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Options = styled("div")`
-   display: flex;
-   align-items: center;
-   justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const OptionLink = styled(Link)`
-   padding: 10px 15px;
-   cursor: pointer;
+  padding: 10px 15px;
+  cursor: pointer;
 `;
 
 // MAIN
 const Header = ({ currentUser, hidden }) => {
-   return (
-      <Container>
-         <LogoLink to="/">
-            <Logo />
-         </LogoLink>
+  return (
+    <Container>
+      <LogoLink to="/">
+        <Logo />
+      </LogoLink>
 
-         <Options>
-            <OptionLink to="/shop">Shop</OptionLink>
-            <OptionLink to="/contact">Contact</OptionLink>
-            {currentUser ? (
-               <OptionLink as="div" onClick={() => auth.signOut()}>
-                  Sign Out
-               </OptionLink>
-            ) : (
-               <OptionLink to="/auth">Sign In</OptionLink>
-            )}
-            <CartIcon />
-         </Options>
+      <Options>
+        <OptionLink to="/shop">Shop</OptionLink>
+        <OptionLink to="/contact">Contact</OptionLink>
+        {currentUser ? (
+          <OptionLink as="div" onClick={() => auth.signOut()}>
+            Sign Out
+          </OptionLink>
+        ) : (
+          <OptionLink to="/auth">Sign In</OptionLink>
+        )}
+        <CartIcon />
+      </Options>
 
-         {hidden ? "" : <CartDropdown />}
-      </Container>
-   );
+      {hidden ? "" : <CartDropdown />}
+    </Container>
+  );
 };
 
 const mapStateToProps = createStructuredSelector({ currentUser: selectCurrentUser, hidden: selectCartHidden });
