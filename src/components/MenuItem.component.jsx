@@ -35,6 +35,7 @@ const Container = styled(motion.div)`
   }
 
   .content {
+    cursor: pointer;
     z-index: 2;
     height: 90px;
     padding: 0 25px;

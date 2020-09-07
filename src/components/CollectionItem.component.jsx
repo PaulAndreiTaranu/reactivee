@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 // STYLES
 const Container = styled(motion.div)`
-  width: 22%;
+  width: 22vw;
   height: 350px;
   position: relative;
 

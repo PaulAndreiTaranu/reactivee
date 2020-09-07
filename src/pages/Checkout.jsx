@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
 import CheckoutItem from "../components/CheckoutItem.component";
+import StripeButton from "../components/StripeButton.component";
 import { selectCartItems, selectCartTotal } from "../redux/cart/cart.selectors";
 import styled from "styled-components";
 
@@ -35,8 +36,20 @@ const HeaderCol = styled("div")`
   align-items: center;
   justify-content: center;
 
-  &:last-child {
+  & :last-child {
     width: 8%;
+  }
+`;
+
+const Footer = styled("div")`
+  margin-top: 5vh;
+
+  & :first-child {
+    color: red;
+  }
+
+  > *:not(:first-child) {
+    margin-left: 5vw;
   }
 `;
 
@@ -63,9 +76,11 @@ const Checkout = ({ cartItems, total }) => {
       {cartItems.map(cartItem => (
         <CheckoutItem key={cartItem.id} cartItem={cartItem} />
       ))}
-      <div>
+      <Footer>
+        <span>*Test Credit Card: 4242 4242 4242 4242 - month/year - 123</span>
         <span>Total: ${total}</span>
-      </div>
+        <StripeButton price={total} />
+      </Footer>
     </Container>
   );
 };
